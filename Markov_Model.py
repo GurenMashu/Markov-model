@@ -36,10 +36,10 @@ def to_index(text_lines, index):
 
 # Training the model
 def training(text_indexed, author_labels, id):#initialize the A and pi arrays
-    edgar_A = np.zeros((id, id))
-    robert_A = np.zeros((id, id))
-    edgar_pi = np.zeros(id)
-    robert_pi = np.zeros(id)
+    edgar_A = np.zeros((id+1, id+1))
+    robert_A = np.zeros((id+1, id+1))
+    edgar_pi = np.zeros(id+1)
+    robert_pi = np.zeros(id+1)
 
     for text, label in zip(text_indexed, author_labels):# A and pi matrices are trained by adding 1 for every hit
         first = text[0]#the pi matrix part
@@ -70,12 +70,26 @@ def normalize_log(pi, A):
     log_A = np.log(normalized_A)
     return log_pi, log_A
 
-def predict(text, index, unknown_word, edgar_log_pi, edgar_log_A, robert_log_pi, robert_log_A):
-    unknown_word = len(edgar_log_pi)-1#has to be introduced due to indexing problems
+
+def priors(author_labels_train):
+    edgar = sum(y==0 for y in author_labels_train)
+    robert = sum(y == 1 for y in author_labels_train)
+    total = len(author_labels_train)
+    edgar_prior = edgar/total
+    robert_prior = robert / total
+    edgar_log_prior = np.log(edgar_prior)
+    robert_log_prior = np.log(robert_prior)
+    return edgar_log_prior,robert_log_prior
+
+
+def predict(text, index, unknown_word, edgar_log_pi, edgar_log_A, robert_log_pi, robert_log_A, author_labels_train):
 
     # takes the first log probability for each of the groups
     edgar_final_prob = edgar_log_pi[index.get(text[0],unknown_word)]
     robert_final_prob = robert_log_pi[index.get(text[0],unknown_word)]
+    edgar_log_prior, robert_log_prior = priors(author_labels_train)
+    edgar_final_prob += edgar_log_prior
+    robert_final_prob += robert_log_prior
 
     # adds together the log values for each of the author for a given term, term+1 value pair
     for i in range(len(text)-1):
@@ -92,7 +106,7 @@ def predict(text, index, unknown_word, edgar_log_pi, edgar_log_A, robert_log_pi,
 def model_preprocessing():#pre-processes the data
 
 
-    data_set = ["text file here","second text file here"]#change the directory location according to where you've
+    data_set = ["D:/edgar_poems.txt","D:/robert_frost.txt"]#change the directory location according to where you've
                                                             # the dataset
 
     index, author_labels, text_lines, id, unknown_word = preprocessing(data_set)
@@ -108,11 +122,12 @@ def model_training(text_indexed, author_labels, id):#trains the model data
 
 def main():#main function putting it all together
     text_indexed, index, author_labels, text_lines, id, unknown_word = model_preprocessing()
-    text_indexed_train, text_indexed_test, author_labels_train, author_labels_test = train_test_split(text_indexed, author_labels, test_size=.1, random_state = 42)
+    text_indexed_train, text_indexed_test, author_labels_train, author_labels_test = train_test_split(text_indexed, author_labels, test_size=.2, random_state = 42)
     edgar_log_pi, edgar_log_A, robert_log_pi, robert_log_A = model_training(text_indexed_train, author_labels_train, id)#preprocess trainging and test data
     count = 0
     for text_test, label_test in zip(text_indexed_test, author_labels_test):
-        predicted_label = predict(text_test, index, unknown_word, edgar_log_pi, edgar_log_A, robert_log_pi, robert_log_A)
+        predicted_label = predict(text_test, index, unknown_word, edgar_log_pi, edgar_log_A, robert_log_pi,
+                                  robert_log_A, author_labels_train)
 
         if predicted_label == label_test:
             count+=1
