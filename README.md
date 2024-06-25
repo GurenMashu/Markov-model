@@ -11,4 +11,4 @@ The model has an accuracy of around 41% with test_size set to .2
 This was just a learning experience, and the model, as is evident didnt fare too well in terms of accuracy compared to even the most rudimentary 
 modern NLP algorithms
 
-Better datasets did increase the accuracy value
+Better datasets did increase the accuracy value, so that could be a good means of improving overall accuracy
