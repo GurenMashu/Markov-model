@@ -106,7 +106,7 @@ def predict(text, index, unknown_word, edgar_log_pi, edgar_log_A, robert_log_pi,
 def model_preprocessing():#pre-processes the data
 
 
-    data_set = ["D:/edgar_poems.txt","D:/robert_frost.txt"]#change the directory location according to where you've
+    data_set = ["D:/Code/Datasets/edgar_allan_poe.txt","D:/Code/Datasets/robert_frost.txt"]#change the directory location according to where you've
                                                             # the dataset
 
     index, author_labels, text_lines, id, unknown_word = preprocessing(data_set)
@@ -121,18 +121,22 @@ def model_training(text_indexed, author_labels, id):#trains the model data
 
 
 def main():#main function putting it all together
-    text_indexed, index, author_labels, text_lines, id, unknown_word = model_preprocessing()
-    text_indexed_train, text_indexed_test, author_labels_train, author_labels_test = train_test_split(text_indexed, author_labels, test_size=.2, random_state = 42)
-    edgar_log_pi, edgar_log_A, robert_log_pi, robert_log_A = model_training(text_indexed_train, author_labels_train, id)#preprocess trainging and test data
-    count = 0
-    for text_test, label_test in zip(text_indexed_test, author_labels_test):
-        predicted_label = predict(text_test, index, unknown_word, edgar_log_pi, edgar_log_A, robert_log_pi,
-                                  robert_log_A, author_labels_train)
+    avg_accuracy = 0
+    for i in range(100):
+        text_indexed, index, author_labels, text_lines, id, unknown_word = model_preprocessing()
+        text_indexed_train, text_indexed_test, author_labels_train, author_labels_test = train_test_split(text_indexed, author_labels, test_size=.2, random_state = i)
+        edgar_log_pi, edgar_log_A, robert_log_pi, robert_log_A = model_training(text_indexed_train, author_labels_train, id)#preprocess trainging and test data
+        count = 0
+        for text_test, label_test in zip(text_indexed_train, author_labels_train):
+            predicted_label = predict(text_test, index, unknown_word, edgar_log_pi, edgar_log_A, robert_log_pi,
+                                      robert_log_A, author_labels_train)
 
-        if predicted_label == label_test:
-            count+=1
-    accuracy = count/(len(author_labels_test))
-    print(f'The model accuracy comes to {accuracy*100:.2f}%')
+            if predicted_label == label_test:
+                count+=1
+        accuracy = count/(len(author_labels_train))
+        avg_accuracy += accuracy
+    avg_accuracy /= 100
+    print(f'The model accuracy comes to {avg_accuracy*100:.2f}%')
 
 if __name__ == '__main__':
     main()
