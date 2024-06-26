@@ -9,9 +9,17 @@ Make sure that the file path is set correctly in the apporpriate list
 
 The model has an accuracy of around 66.42% with test_size set to .2
 
+
+
+
 The average recall is 100.00%
+
 The average f1 score is 79.80%
+
 The average precision is 66.42%
+
+
+
 
 The recall value of 100% indicates the model is very capable at capturing true positives
 however the lower value of precision indicates 33.58% of all positives are falsely matched
