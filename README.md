@@ -30,8 +30,7 @@ The model clearly needs improvement specifically in terms of reducing false posi
 rectified by improving the training data as the false positives might be arising due to ambiguous text where both 
 authors are equally likely.
 
-## Markov model Classifier
-
+## Markov model text generator
 The poem file used were the ones provided by Lazy programmer Inc in his udemy course on NLP.
 This is the second part of two projects where I create a text generator.
 ### Usage
