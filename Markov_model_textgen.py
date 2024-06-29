@@ -91,7 +91,7 @@ def predict(pi_prob, a1_prob, a2_prob, current_word=None, previous_word=None):
     return previous_word, current_word
 
 
-dataset = "D:/Code/Datasets/robert_frost.txt"#change the file location here
+dataset = "robert_frost.txt"#change the file location here
 
 
 pi_prob, a1_prob, a2_prob = Markov_chain(dataset)
