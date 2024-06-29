@@ -114,7 +114,7 @@ def predict(text, index, unknown_word, edgar_log_pi, edgar_log_A, robert_log_pi,
 def model_preprocessing():#pre-processes the data
 
 
-    data_set = ["edgar_allen_poe.txt","robert_frost.txt"]#change the directory location according to where you've
+    data_set = ["edgar_poems.txt","robert_frost.txt"]#change the directory location according to where you've
                                                         # the dataset
 
     index, author_labels, text_lines, id, unknown_word = preprocessing(data_set)
