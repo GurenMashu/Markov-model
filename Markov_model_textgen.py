@@ -120,4 +120,4 @@ def listToString(s):#converts to list to display in poem terms
 
 
 print(listToString(poem))
-
+#include stdio.h boii
