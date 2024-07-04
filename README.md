@@ -16,7 +16,7 @@ Download the .txt files and then copy their path to paste in the program.
 
 *  The average recall is 100.00%.
 *  The average F1 score is 79.80%.
-*  The average precision is 66.42%.
+*  u sure????
 
 ### Conclusion of Project 1
 
